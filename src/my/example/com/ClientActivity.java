@@ -1,7 +1,5 @@
 package my.example.com;
 
-
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -19,7 +17,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class Try2Activity extends Activity {
+public class ClientActivity extends Activity {
 	
 	
 	
@@ -29,7 +27,7 @@ public class Try2Activity extends Activity {
 	public static final int MSG_SET_STRING_VALUE = 4;
 	
 	
-    Button btnStart, btnStop, btnBind, btnUnbind, btnUpby1, btnUpby10;
+    Button btnBind, btnUnbind, btnUpby1, btnUpby10;
     TextView textStatus, textIntValue, textStrValue;
     Messenger mService = null;
     boolean mIsBound;
@@ -75,8 +73,7 @@ public class Try2Activity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        btnStart = (Button)findViewById(R.id.btnStart);
-        btnStop = (Button)findViewById(R.id.btnStop);
+       
         btnBind = (Button)findViewById(R.id.btnBind);
         btnUnbind = (Button)findViewById(R.id.btnUnbind);
         textStatus = (TextView)findViewById(R.id.textStatus);
@@ -85,8 +82,7 @@ public class Try2Activity extends Activity {
         btnUpby1 = (Button)findViewById(R.id.btnUpby1);
         btnUpby10 = (Button)findViewById(R.id.btnUpby10);
 
-        btnStart.setOnClickListener(btnStartListener);
-        btnStop.setOnClickListener(btnStopListener);
+    
         btnBind.setOnClickListener(btnBindListener);
         btnUnbind.setOnClickListener(btnUnbindListener);
         btnUpby1.setOnClickListener(btnUpby1Listener);
@@ -115,38 +111,7 @@ public class Try2Activity extends Activity {
             textStrValue.setText(state.getString("textStrValue"));
         }
     }
-//    private void CheckIfServiceIsRunning() {
-//        //If the service is running when the activity starts, we want to automatically bind to it.
-//        if (MyService.isRunning()) {
-//            doBindService();
-//        }
-//    }
 
-    private OnClickListener btnStartListener = new OnClickListener() {
-        public void onClick(View v){
-        	 Bundle b = new Bundle();
-             b.putString("host", "192.168.1.84");
-             b.putString("routing_key", "anonymous.info");
-             b.putString("exchange_name", "topic_logs");
-             Intent intent = new Intent();
-             intent.putExtras(b);
-             intent.setClassName("com.example.service", "com.example.service.MyService");
-//             startService(intent);
-             
-            
-         
-
-            // startService(i);
-        
-            doBindService();
-        }
-    };
-    private OnClickListener btnStopListener = new OnClickListener() {
-        public void onClick(View v){
-            doUnbindService();
-            stopService(new Intent("com.example.service.MyService"));
-        }
-    };
     private OnClickListener btnBindListener = new OnClickListener() {
         public void onClick(View v){
             doBindService();

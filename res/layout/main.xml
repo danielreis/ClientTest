@@ -6,8 +6,6 @@
     >
 
 <RelativeLayout android:id="@+id/RelativeLayout01" android:layout_width="fill_parent" android:layout_height="wrap_content">
-<Button android:id="@+id/btnStart" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Start Service"></Button>
-<Button android:id="@+id/btnStop" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Stop Service" android:layout_alignParentRight="true"></Button>
 </RelativeLayout>
 
 <RelativeLayout android:id="@+id/RelativeLayout02" android:layout_width="fill_parent" android:layout_height="wrap_content">
