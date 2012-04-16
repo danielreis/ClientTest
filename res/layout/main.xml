@@ -1,25 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout01"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
 
-<RelativeLayout android:id="@+id/RelativeLayout01" android:layout_width="fill_parent" android:layout_height="wrap_content">
+    <Button
+        android:id="@+id/topicBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="Topic Subscribe" />
+
+    <ToggleButton
+        android:id="@+id/serviceToggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@+id/listenQueueBtn2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:onClick="onToggleClicked"
+        android:textOff="Service Off"
+        android:textOn="Service On" />
+
+    <Button
+        android:id="@+id/listenQueueBtn2"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/serviceToggleButton"
+        android:text="Subs 2" />
+
+    <Button
+        android:id="@+id/listenQueueBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/listenQueueBtn2"
+        android:text="Subs 1" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/serviceToggleButton" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/textViewMessages"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="List incoming messages" />
+
+        </LinearLayout>
+    </ScrollView>
+
 </RelativeLayout>
-
-<RelativeLayout android:id="@+id/RelativeLayout02" android:layout_width="fill_parent" android:layout_height="wrap_content">
-<Button android:id="@+id/btnBind" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bind to Service"></Button>
-<Button android:id="@+id/btnUnbind" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Unbind from Service" android:layout_alignParentRight="true"></Button>
-</RelativeLayout>
-
-<TextView android:id="@+id/textStatus" android:textSize="24sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Status Goes Here" />
-<TextView android:id="@+id/textIntValue" android:textSize="24sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Integer Value Goes Here" />
-<TextView android:id="@+id/textStrValue" android:textSize="24sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="String Value Goes Here" />
-
-<RelativeLayout android:id="@+id/RelativeLayout03" android:layout_width="fill_parent" android:layout_height="wrap_content">
-<Button android:id="@+id/btnUpby1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Increment by 1"></Button>
-<Button android:id="@+id/btnUpby10" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Increment by 10" android:layout_alignParentRight="true"></Button>
-</RelativeLayout>
-
-</LinearLayout>
