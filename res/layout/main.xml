@@ -1,64 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/RelativeLayout01"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
-
-    <Button
-        android:id="@+id/topicBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="Topic Subscribe" />
+    android:layout_height="wrap_content"
+    android:gravity="left"
+    android:orientation="vertical" >
 
     <ToggleButton
-        android:id="@+id/serviceToggleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_alignBottom="@+id/listenQueueBtn2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:id="@+id/serviceTogglebtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:onClick="onToggleClicked"
-        android:textOff="Service Off"
-        android:textOn="Service On" />
+        android:text="ToggleButton" />
 
     <Button
-        android:id="@+id/listenQueueBtn2"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/serviceToggleButton"
-        android:text="Subs 2" />
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Get Users" />
 
     <Button
-        android:id="@+id/listenQueueBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/listenQueueBtn2"
-        android:text="Subs 1" />
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Get Sensors" />
+
+    <Button
+        android:id="@+id/subsBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Subscribe" />
 
     <ScrollView
         android:id="@+id/scrollView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/serviceToggleButton" >
+        android:layout_width="319dp"
+        android:layout_height="175dp" >
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/textView1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:text="TextView" />
 
-            <TextView
-                android:id="@+id/textViewMessages"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="List incoming messages" />
-
-        </LinearLayout>
     </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>

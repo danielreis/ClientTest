@@ -11,8 +11,7 @@
         android:label="@string/app_name" >
         <activity
             android:name=".ClientActivity"
-            android:label="@string/app_name"
-             android:launchMode="singleInstance" >
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.BROWSABLE" />
@@ -21,6 +20,7 @@
         </activity>
          <service android:name="com.example.service.MyService"></service>
          
+         	<activity android:name=".GetUsersActivity"></activity>	
      
     </application>
 
