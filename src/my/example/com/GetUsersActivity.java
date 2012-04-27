@@ -11,6 +11,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class GetUsersActivity extends ListActivity
 {
@@ -35,6 +36,11 @@ public class GetUsersActivity extends ListActivity
 		else if (typeOfList.compareTo("sensor")==0)
 		{
 			type="sensor";
+
+		} 
+		else if (typeOfList.compareTo("sub")==0)
+		{
+			type="sub";
 
 		} 
 
@@ -88,6 +94,26 @@ public class GetUsersActivity extends ListActivity
 					setResult(1, intent);
 					finish();
 				}
+			}
+			else if(type =="sub")
+			{
+				//Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+				Bundle b = new Bundle();
+				
+				String token = ":";
+				String[] arr = msg.split(token);
+
+				if(arr.length>0)
+				{
+					Integer p = Integer.decode(arr[0]);
+					b.putInt("sel_sub", p);
+				
+					Intent intent= new Intent();
+					intent.putExtras(b);
+					setResult(1, intent);
+					finish();
+				}
+				
 			}
 
 

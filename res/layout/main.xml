@@ -31,6 +31,12 @@
         android:layout_height="wrap_content"
         android:text="Subscribe" />
 
+    <Button
+        android:id="@+id/manageBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Manage Subscriptions" />
+
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="319dp"
