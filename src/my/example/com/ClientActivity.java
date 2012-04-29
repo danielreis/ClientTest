@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -39,13 +40,14 @@ public class ClientActivity extends Activity
 	public static final int MSG_CONNECT = 5;
 	public static final int MSG_MYSUBS = 15;
 	public static final int MSG_CANCEL_SUBS = 20;
+	public static final int MSG_POST_USER = 7;
 
 	private String Rest_Host = "http://192.168.1.84:3000/";
 
 	private String AMQP_HOST = "192.168.1.84";
 	private int AMQP_PORT = 10000;
 
-	String selected_sensor_rout_key=null;
+	String selected_sensor_rout_key="";
 	String selected_user_exch=null;
 
 	String selected_user_name = "";
@@ -60,13 +62,19 @@ public class ClientActivity extends Activity
 	ArrayAdapter<String> adapter;
 	Button btn ;
 	TextView textView1;
-	Button button1, button2, subsBtn, manageBtn;
+	Button button1, button2, subsBtn, manageBtn, registerBtn;
+	
+	int countSubs=0;
 
 	ToggleButton serviceTogglebtn;
 	Messenger mService = null;
 	boolean mIsBound;
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 
+	public static final String PREFERENCE_FILENAME = "ClientInfo"; 
+
+
+	int user_id = 0;
 
 
 
@@ -110,6 +118,9 @@ public class ClientActivity extends Activity
 					Intent myIntent = new Intent(ClientActivity.this, GetUsersActivity.class);
 					myIntent.putExtras(b);
 					startActivityForResult(myIntent, 1);
+					
+					if(selected_user_id.compareTo("")!=0)
+						button2.setVisibility(Button.VISIBLE);
 
 				}
 
@@ -164,6 +175,8 @@ public class ClientActivity extends Activity
 
 				//	Toast.makeText(getApplicationContext(), "CLIENT: " + str3, Toast.LENGTH_SHORT).show();
 				textView1.append("\nNew msg from (" +  str_exch + ":" + str_rk + "): " + str_msg);
+				countSubs++;
+
 				break;
 
 			case MSG_MYSUBS:
@@ -175,6 +188,7 @@ public class ClientActivity extends Activity
 				}
 				if(arr.size()!=0)
 				{
+					countSubs=arr.size();
 					Bundle b = new Bundle();
 					b.putStringArrayList("list",arr);
 					b.putString("typeOfList", "sub");
@@ -182,6 +196,15 @@ public class ClientActivity extends Activity
 					myIntent.putExtras(b);
 					startActivityForResult(myIntent, 3);
 				}
+				else
+					Toast.makeText(getApplicationContext(), "No subscriptions", Toast.LENGTH_SHORT).show();
+				break;
+			case MSG_POST_USER:
+
+				int code = msg.getData().getInt("rsp_code");
+				if(code==302)
+					Toast.makeText(getApplicationContext(), "Utilizador registado", Toast.LENGTH_SHORT).show();
+
 				break;
 
 			default:
@@ -197,6 +220,7 @@ public class ClientActivity extends Activity
 
 			sendConnectInfo(AMQP_HOST, AMQP_PORT, selected_sensor_rout_key , selected_user_exch);
 			Toast.makeText(v.getContext(), "Listen EXCH:" + selected_user_exch + "\nRK: " + selected_sensor_rout_key, Toast.LENGTH_LONG).show();
+			
 		}
 	};
 
@@ -218,6 +242,20 @@ public class ClientActivity extends Activity
 		}
 	};
 
+		@Override
+		public void onResume() {
+			super.onResume();
+//			Toast.makeText(getApplicationContext(), "ON resume..." , Toast.LENGTH_SHORT).show();
+			if(selected_user_id.compareTo("")!=0)
+				button2.setVisibility(Button.VISIBLE);
+			
+			if(selected_sensor_rout_key.compareTo("")!=0)
+				subsBtn.setVisibility(Button.VISIBLE);
+		
+		}
+		
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -233,14 +271,44 @@ public class ClientActivity extends Activity
 
 		button1.setOnClickListener(button1Click);
 		button2.setOnClickListener(button2Click);
-		button2.setVisibility(Button.INVISIBLE);
-		button1.setVisibility(Button.INVISIBLE);
 		manageBtn = (Button)findViewById(R.id.manageBtn);
 		manageBtn.setOnClickListener(btnManageListener);
 
 		subsBtn = (Button)findViewById(R.id.subsBtn);
 
 		subsBtn.setOnClickListener(btnSubscribeListener);
+
+		registerBtn = (Button)findViewById(R.id.registerBtn);
+		registerBtn.setOnClickListener(btnRegisterListener);
+
+		button1.setVisibility(Button.INVISIBLE);
+		button2.setVisibility(Button.INVISIBLE);
+		subsBtn.setVisibility(Button.INVISIBLE);
+		registerBtn.setVisibility(Button.INVISIBLE);
+		manageBtn.setVisibility(Button.INVISIBLE);
+//		textView1.setVisibility(TextView.INVISIBLE);
+
+
+	}
+
+	private int getUserIdPref()
+	{
+		int id=0;
+		SharedPreferences appSettings = getSharedPreferences(PREFERENCE_FILENAME, MODE_PRIVATE);
+		boolean ret = appSettings.contains("user_id");
+
+		if(ret==true)
+		{
+			id=appSettings.getInt("user_id", 0);
+
+		}
+		return id;	
+//		SharedPreferences appSettings = getSharedPreferences(PREFERENCE_FILENAME, MODE_PRIVATE);
+		//		SharedPreferences.Editor prefEditor = appSettings.edit();  
+		//		prefEditor.putInt("user_id", user_id);  
+		//		prefEditor.commit();
+
+
 	}
 
 	@Override
@@ -264,6 +332,8 @@ public class ClientActivity extends Activity
 		{
 			doBindService();
 			button1.setVisibility(Button.VISIBLE);
+			registerBtn.setVisibility(Button.VISIBLE);
+			manageBtn.setVisibility(Button.VISIBLE);
 		} else {
 			doUnbindService();
 
@@ -275,7 +345,28 @@ public class ClientActivity extends Activity
 		public void onClick(View v)
 		{
 
+			
 			send_Msg_Serv(MSG_MYSUBS);
+
+		}
+	};
+
+	private OnClickListener btnRegisterListener = new OnClickListener() 
+	{
+		public void onClick(View v)
+		{
+			user_id = getUserIdPref();
+
+			if(user_id==0)
+			{
+				Intent myIntent = new Intent(ClientActivity.this, RegisterUserActivity.class);
+				startActivityForResult(myIntent, 4);
+			}
+
+			else
+				Toast.makeText(getApplicationContext(), "Already registered" , Toast.LENGTH_SHORT).show();
+
+
 
 		}
 	};
@@ -371,6 +462,7 @@ public class ClientActivity extends Activity
 					msg.setData(b);
 					msg.replyTo = mMessenger;
 					mService.send(msg);
+					countSubs++;
 				} catch (RemoteException e) {
 					Log.i("ERROR", "SendConnectInfo()");
 				}
@@ -472,8 +564,8 @@ public class ClientActivity extends Activity
 			}
 
 		}
-		
-		
+
+
 		if(resultCode==1 && requestCode==3 )
 		{
 			textView1.append("\nSelected Sensor: ");
@@ -485,7 +577,8 @@ public class ClientActivity extends Activity
 			else
 			{
 				final int sel_sub = data.getExtras().getInt("sel_sub");
-				
+				countSubs--;
+
 				new AlertDialog.Builder( this )
 				.setTitle( "Cancel Subscription" )
 				.setMessage( "After cancelling you will receive one more message" )
@@ -504,11 +597,36 @@ public class ClientActivity extends Activity
 					}
 				} )
 				.show();
-				
-//				Toast.makeText(getApplicationContext(), , Toast.LENGTH_SHORT).show();
-	
+
+
 
 			}
+
+		}
+
+		if(resultCode==RESULT_OK && requestCode==4 )
+		{
+
+			if(!mIsBound)
+				doBindService();
+
+			if(mIsBound)
+			{
+				String fname =  data.getExtras().getString("fname");
+				String lname = data.getExtras().getString("lname");
+
+				int age = data.getExtras().getInt("age");
+
+				Bundle b = new Bundle();
+				b.putString("host", Rest_Host + "users");
+				b.putString("fname", fname);
+				b.putString("lname", lname);
+				b.putInt("age", age);
+				send_REST_Req(MSG_POST_USER, b);
+
+			}
+
+
 
 		}
 	}

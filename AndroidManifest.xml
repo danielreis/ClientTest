@@ -22,6 +22,9 @@
          <service android:name="com.example.service.MyService"></service>
          
          	<activity android:name=".GetUsersActivity"
+         	    android:screenOrientation="portrait"></activity>
+         	
+         	<activity android:name=".RegisterUserActivity"
          	    android:screenOrientation="portrait"></activity>	
      
     </application>
