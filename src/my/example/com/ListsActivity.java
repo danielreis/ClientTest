@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class GetUsersActivity extends ListActivity
+public class ListsActivity extends ListActivity
 {
 
 	static ArrayList<String> arr = new ArrayList<String>();
@@ -27,7 +27,7 @@ public class GetUsersActivity extends ListActivity
 
 		String typeOfList = getIntent().getExtras().getString("typeOfList");
 		arr = getIntent().getExtras().getStringArrayList("list");
-		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_fruit,arr));
+		setListAdapter(new ArrayAdapter<String>(this, R.layout.custom_list,arr));
 		if (typeOfList.compareTo("user")==0)
 		{
 			type="user";
@@ -57,7 +57,7 @@ public class GetUsersActivity extends ListActivity
 		public void onItemClick(AdapterView<?> parent, View view,int position, long id) 
 		{
 			String msg = ((TextView) view).getText().toString();
-
+			Log.i("POS", String.valueOf(position));
 			if(type=="user")
 			{
 				Bundle b = new Bundle();
